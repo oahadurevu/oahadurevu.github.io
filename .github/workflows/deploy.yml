@@ -5,6 +5,12 @@ on:
     branches:
       - main
 
+# Allow only one Pages deployment at a time.
+# Queue later runs instead of creating overlapping deployments.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
 permissions:
   contents: read
   pages: write
