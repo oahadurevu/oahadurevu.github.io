@@ -2,26 +2,25 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Linkedin } from 'lucide-react';
 import { navLinks, profile } from '@/data';
+import profileImage from '../assets/WhatsApp Image .jpeg';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState('#home');
-  const displayLinks = [
-    { label: 'CODE', href: '#projects' },
-    { label: 'BUILD', href: '#experience' },
-    { label: 'LEARN', href: '#study' },
-    { label: 'GROW', href: '#contact' },
-  ];
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 24);
+
       const sections = navLinks.map((l) => l.href.slice(1));
+
       for (const id of sections) {
         const el = document.getElementById(id);
+
         if (el) {
           const rect = el.getBoundingClientRect();
+
           if (rect.top <= 120 && rect.bottom >= 120) {
             setActive(`#${id}`);
             break;
@@ -29,13 +28,16 @@ export default function Navbar() {
         }
       }
     };
+
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const handleNav = (href: string) => {
     setOpen(false);
+
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -49,59 +51,126 @@ export default function Navbar() {
       }`}
     >
       <nav className="container-max flex items-center justify-between px-5 sm:px-8 lg:px-12">
+
+        {/* LOGO + PROFILE IMAGE */}
         <button
           onClick={() => handleNav('#home')}
-          className="hidden"
+          className="group flex items-center gap-3"
           aria-label="Home"
         >
-          <span className="font-mono text-sm font-bold tracking-[0.24em] text-blue-300 transition-colors group-hover:text-cyan-300">
-            EVU<span className="text-fuchsia-400">_</span>
+
+          {/* Animated Neon Profile */}
+          <div className="relative flex h-11 w-11 items-center justify-center">
+
+            {/* Rotating neon ring */}
+            <motion.div
+              className="absolute inset-[-3px] rounded-full"
+              style={{
+                background:
+                  'conic-gradient(from 0deg, #06b6d4, #3b82f6, #22d3ee, #8b5cf6, #06b6d4)',
+              }}
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+
+            {/* Neon glow */}
+            <motion.div
+              className="absolute inset-[-5px] rounded-full bg-cyan-400/30 blur-md"
+              animate={{
+                opacity: [0.35, 0.8, 0.35],
+                scale: [0.95, 1.08, 0.95],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+
+            {/* Dark inner border */}
+            <div className="absolute inset-[1px] rounded-full bg-ink-950 p-[2px]">
+
+              {/* Profile picture */}
+              <img
+                src={profileImage}
+                alt="Oahadur Rahman Evu"
+                className="h-full w-full rounded-full object-cover"
+              />
+
+            </div>
+
+            {/* Small neon highlight */}
+            <motion.span
+              className="absolute -right-1 top-0 h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_10px_3px_rgba(34,211,238,0.8)]"
+              animate={{
+                opacity: [0.4, 1, 0.4],
+                scale: [0.8, 1.2, 0.8],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+          </div>
+
+          {/* Name */}
+          <span className="font-semibold text-white sm:block">
+            Oahadur<span className="text-cyan-400">.</span>
           </span>
         </button>
 
         {/* Desktop nav */}
-        <ul className="hidden items-center gap-0 lg:flex">
-          {displayLinks.map((link, index) => (
+        <ul className="hidden items-center gap-1 lg:flex">
+          {navLinks.map((link) => (
             <li key={link.href}>
               <button
                 onClick={() => handleNav(link.href)}
-                className={`relative rounded-md px-3 py-2 text-xs font-semibold tracking-[0.22em] transition-colors ${
+                className={`relative rounded-md px-3.5 py-2 text-sm font-medium transition-colors ${
                   active === link.href
                     ? 'text-cyan-300'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {link.label}
+
                 {active === link.href && (
                   <motion.span
                     layoutId="nav-active"
                     className="absolute inset-0 -z-10 rounded-md bg-white/[0.06]"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 380,
+                      damping: 30,
+                    }}
                   />
                 )}
               </button>
-              {index < displayLinks.length - 1 && (
-                <span className="px-1 text-xs text-blue-500/80">/</span>
-              )}
             </li>
           ))}
         </ul>
 
+        {/* Social icons */}
         <div className="hidden items-center gap-2 lg:flex">
           <a
             href={profile.github}
             target="_blank"
             rel="noreferrer"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition-all hover:border-cyan-400/40 hover:text-cyan-300 hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
             aria-label="GitHub"
           >
             <Github size={18} />
           </a>
+
           <a
             href={profile.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition-all hover:border-cyan-400/40 hover:text-cyan-300 hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
             aria-label="LinkedIn"
           >
             <Linkedin size={18} />
@@ -130,6 +199,7 @@ export default function Navbar() {
             className="overflow-hidden lg:hidden"
           >
             <ul className="container-max mx-auto mt-3 grid gap-1 px-5 pb-4 sm:px-8">
+
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <button
@@ -144,6 +214,7 @@ export default function Navbar() {
                   </button>
                 </li>
               ))}
+
               <li className="mt-2 flex gap-2">
                 <a
                   href={profile.github}
@@ -151,17 +222,21 @@ export default function Navbar() {
                   rel="noreferrer"
                   className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/10 py-3 text-sm text-slate-300"
                 >
-                  <Github size={16} /> GitHub
+                  <Github size={16} />
+                  GitHub
                 </a>
+
                 <a
                   href={profile.linkedin}
                   target="_blank"
                   rel="noreferrer"
                   className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/10 py-3 text-sm text-slate-300"
                 >
-                  <Linkedin size={16} /> LinkedIn
+                  <Linkedin size={16} />
+                  LinkedIn
                 </a>
               </li>
+
             </ul>
           </motion.div>
         )}
