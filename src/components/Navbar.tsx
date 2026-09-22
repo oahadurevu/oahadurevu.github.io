@@ -7,6 +7,12 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState('#home');
+  const displayLinks = [
+    { label: 'CODE', href: '#projects' },
+    { label: 'BUILD', href: '#experience' },
+    { label: 'LEARN', href: '#study' },
+    { label: 'GROW', href: '#contact' },
+  ];
 
   useEffect(() => {
     const onScroll = () => {
@@ -45,24 +51,21 @@ export default function Navbar() {
       <nav className="container-max flex items-center justify-between px-5 sm:px-8 lg:px-12">
         <button
           onClick={() => handleNav('#home')}
-          className="group flex items-center gap-2.5"
+          className="hidden"
           aria-label="Home"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 font-bold text-white shadow-lg shadow-blue-500/20">
-            E
-          </span>
-          <span className="hidden font-semibold text-white sm:block">
-            Oahadur<span className="text-cyan-400">.</span>
+          <span className="font-mono text-sm font-bold tracking-[0.24em] text-blue-300 transition-colors group-hover:text-cyan-300">
+            EVU<span className="text-fuchsia-400">_</span>
           </span>
         </button>
 
         {/* Desktop nav */}
-        <ul className="hidden items-center gap-1 lg:flex">
-          {navLinks.map((link) => (
+        <ul className="hidden items-center gap-0 lg:flex">
+          {displayLinks.map((link, index) => (
             <li key={link.href}>
               <button
                 onClick={() => handleNav(link.href)}
-                className={`relative rounded-md px-3.5 py-2 text-sm font-medium transition-colors ${
+                className={`relative rounded-md px-3 py-2 text-xs font-semibold tracking-[0.22em] transition-colors ${
                   active === link.href
                     ? 'text-cyan-300'
                     : 'text-slate-400 hover:text-white'
@@ -77,6 +80,9 @@ export default function Navbar() {
                   />
                 )}
               </button>
+              {index < displayLinks.length - 1 && (
+                <span className="px-1 text-xs text-blue-500/80">/</span>
+              )}
             </li>
           ))}
         </ul>
