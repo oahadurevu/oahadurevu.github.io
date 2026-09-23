@@ -125,7 +125,7 @@ export default function Navbar() {
 
           {/* Name */}
           <span className="hidden font-semibold text-white sm:block">
-            Oahadur<span className="text-cyan-400">.</span>
+            EVU<span className="text-cyan-400"></span>
           </span>
         </button>
 
